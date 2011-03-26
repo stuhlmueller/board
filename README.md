@@ -12,14 +12,12 @@ This is an example of how to use Board to compute policies for simple games:
        '(
          (define (policy-A1)
            (solve utility-avoid
-                  policy-B0
-                  ))
+                  policy-B0))
     
          (define (policy-B0)
            (solve utility-match
                   policy-A0
-                  (lambda () (sample-action .6))
-                  ))
+                  (lambda () (sample-action .6))))
     
          (define (policy-A0)
            (solve utility-match
