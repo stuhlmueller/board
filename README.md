@@ -1,4 +1,6 @@
-Example:
+# Board
+
+This is an example of how to use Board to compute policies for simple games:
 
     #!r6rs
     
@@ -30,7 +32,7 @@ Example:
     (run-scenario my-scenario
                   (recursion-solver 10 2))
 
-Result:
+Running the above code in [Ikarus Scheme](http://ikarus-scheme.org/) or [Vicare Scheme](https://github.com/marcomaggi/vicare) results in the following output:
 
     policy-A1
     (action-2 . 0.9999999979242495)
