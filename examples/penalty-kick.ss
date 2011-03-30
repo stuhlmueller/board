@@ -9,16 +9,16 @@
 
      (define actions '(left right))
 
-     (define (kicker-utility a b)
+     (define (kicker-utility self other)
        (cond
-        [(and (eq? a 'left) (eq? b 'left)) 0.2]
-        [(and (eq? a 'left) (eq? b 'right)) 0.6]
-        [(and (eq? a 'right) (eq? b 'right)) 0.3]
-        [(and (eq? a 'right) (eq? b 'left)) 0.7]
-        [else (error (list a b) "unknown actions")]))
+        [(and (eq? self 'left) (eq? other 'left)) 0.2]
+        [(and (eq? self 'left) (eq? other 'right)) 0.6]
+        [(and (eq? self 'right) (eq? other 'right)) 0.3]
+        [(and (eq? self 'right) (eq? other 'left)) 0.7]
+        [else (error (list self other) "unknown actions")]))
 
-     (define (goalie-utility a b)
-       (- 1.0 (kicker-utility a b)))
+     (define (goalie-utility self other)
+       (- 1.0 (kicker-utility other self)))
      
      (define (kicker-policy)
        (solve kicker-utility
