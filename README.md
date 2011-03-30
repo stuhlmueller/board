@@ -10,36 +10,36 @@ This is an example of how to use Board to compute policies for simple games:
     (define my-scenario
       (make-scenario
        '(
-         (define (policy-A1)
+         (define actions '(popular-bar other-bar))
+         
+         (define (jim-1)
            (solve utility-avoid
-                  policy-B0))
-    
-         (define (policy-B0)
+                  john-0))
+         
+         (define (jim-0)
            (solve utility-match
-                  policy-A0
+                  john-0
                   (lambda () (sample-action .6))))
-    
-         (define (policy-A0)
+         
+         (define (john-0)
            (solve utility-match
-                  policy-B0
+                  jim-0
                   (lambda () (sample-action .6))))
          )))
     
-    ;; recursion depth 10
-    ;; optimization strength 2
     (run-scenario my-scenario
                   (recursion-solver 10 2))
 
 Running the above code in [Ikarus Scheme](http://ikarus-scheme.org/) or [Vicare Scheme](https://github.com/marcomaggi/vicare) results in the following output:
 
-    policy-A1
-    (action-2 . 0.9999999979242495)
-    (action-1 . 2.061340791863192e-9)
+    jim-1
+    (other-bar . 0.987487235399809)
+    (popular-bar . 0.012512764606264177)
     
-    policy-B0
-    (action-2 . 2.061340791863192e-9)
-    (action-1 . 0.9999999979242495)
+    jim-0
+    (other-bar . 0.012512764606264177)
+    (popular-bar . 0.9874872353998092)
     
-    policy-A0
-    (action-2 . 2.061340791863192e-9)
-    (action-1 . 0.9999999979242495)
+    john-0
+    (other-bar . 0.012512764606264177)
+    (popular-bar . 0.9874872353998092)
