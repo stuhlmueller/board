@@ -29,8 +29,8 @@
              (define ,action-name (uniform-action))
              ,action-name
              (and ,@(make-list hardness
-                               `(flip (exp (,utility-name ,action-name
-                                                          (,other-policy-name (- ,depth-var 1))))))))))))
+                               `(flip (,utility-name ,action-name
+                                                     (,other-policy-name (- ,depth-var 1)))))))))))
  
   (define/curry (recursion-solver depth hardness policies expr)
    (cond [(policy-definition? expr) (recursion-solver:compile-def hardness policies expr)]

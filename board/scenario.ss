@@ -16,18 +16,18 @@
    '(
      (define (utility-match a b)
        (if (eq? a b)
-           0
-           -10))
+           1
+           .1))
 
      (define (utility-avoid a b)
        (if (eq? a b)
-           -10
-           0))
+           .1
+           1))
 
      (define (sample-action p)
        (if (flip p)
-           'action-1
-           'action-2))
+           (first actions)
+           (second actions)))
 
      (define (uniform-action)
        (sample-action .5))
