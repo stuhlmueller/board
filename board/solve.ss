@@ -21,7 +21,8 @@
          [base-policy-name (or (policy-definition->base-policy-name expr)
                                'uniform-action)]
          [action-name (make-variable)]
-         [utility-name (policy-definition->utility-name expr)])
+         [goal-name (policy-definition->goal-name expr)]
+         [causal-model-name (policy-definition->causal-model-name expr)])
      `(define (,policy-name ,depth-var)
         (if (= ,depth-var 0)
             (,base-policy-name)
@@ -29,7 +30,7 @@
              (define ,action-name (uniform-action))
              ,action-name
              (and ,@(make-list hardness
-                               `(flip (,utility-name ,action-name
+                               `(,goal-name (,causal-model-name ,action-name
                                                      (,other-policy-name (- ,depth-var 1)))))))))))
  
   (define/curry (recursion-solver depth hardness policies expr)

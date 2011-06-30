@@ -4,11 +4,7 @@
 
  (board scenario)
 
- (export make-scenario
-         scenario-avoid
-         scenario-match
-         scenario-match-avoid
-         scenario-match-avoid-2)
+ (export make-scenario)
 
  (import (rnrs))
 
@@ -38,53 +34,6 @@
    (append scenario-header
            scenario-defs))
 
- (define scenario-match
-   (make-scenario
-    '(
-      (define A-game-0
-        (game utility-match (solve B-game-0)))
-
-      (define B-game-0
-        (game utility-match (solve A-game-0)))
-      )))
-
- (define scenario-avoid
-   (make-scenario
-    '(
-      (define A-game-0
-        (game utility-avoid (solve B-game-0)))
-
-      (define B-game-0
-        (game utility-avoid (solve A-game-0)))
-      )))
-
- (define scenario-match-avoid
-   (make-scenario
-    '(
-      (define match-avoid
-        (game utility-avoid (solve B-game-0)))
-
-      (define B-game-0
-        (game utility-match (solve A-game-0)))
-
-      (define A-game-0
-        (game utility-match (solve B-game-0)))
-      )))
-
- (define scenario-match-avoid-2
-   (make-scenario
-    '(
-      (define B-game-1
-        (game utility-match (solve A-game-1)))
-      
-      (define A-game-1
-        (game utility-avoid (solve B-game-0)))
-      
-      (define B-game-0
-        (game utility-match (solve A-game-0)))
-      
-      (define A-game-0
-        (game utility-match (solve B-game-1)))
-      )))
+ 
 
  )

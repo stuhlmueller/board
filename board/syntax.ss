@@ -10,7 +10,8 @@
          policy-definition->base-policy-name
          policy-definition->other-policy-name
          policy-definition->policy-name
-         policy-definition->utility-name
+         policy-definition->goal-name
+         policy-definition->causal-model-name
          policy-definition?
          solve?)
 
@@ -36,16 +37,19 @@
  (define (policy-definition->policy-name expr)
    (definition->name expr))
 
- (define (policy-definition->utility-name expr)
+ (define (policy-definition->goal-name expr)
    (second (definition->body expr)))
 
+ (define (policy-definition->causal-model-name expr)
+   (third (definition->body expr)))
+ 
  (define (policy-definition->base-policy-name expr)
-   (if (> (length (definition->body expr)) 3)
-       (fourth (definition->body expr))
+   (if (> (length (definition->body expr)) 4)
+       (fifth (definition->body expr))
        #f))
  
  (define (policy-definition->other-policy-name expr)
-   (third (definition->body expr)))
+   (fourth (definition->body expr)))
 
  (define (policy-call? expr)
    (and (list? expr)
