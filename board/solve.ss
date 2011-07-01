@@ -4,7 +4,8 @@
 
  (board solve)
 
- (export recursion-solver)
+ (export recursion-solver
+         recursion-solver:compile-def)
 
  (import (board syntax)
          (rnrs)
@@ -15,9 +16,9 @@
    (symbol-maker 'v))
  
  (define (recursion-solver:compile-def hardness policies expr)
-   (let ([depth-var (make-variable)]
+   (let* ([depth-var (make-variable)]
          [policy-name (policy-definition->policy-name expr)]
-         [other-policy-name (policy-definition->other-policy-name expr)]
+         [other-policies (policy-definition->other-policies expr depth-var)]
          [base-policy-name (or (policy-definition->base-policy-name expr)
                                'uniform-action)]
          [action-name (make-variable)]
@@ -31,7 +32,7 @@
              ,action-name
              (and ,@(make-list hardness
                                `(,goal-name (,causal-model-name ,action-name
-                                                     (,other-policy-name (- ,depth-var 1)))))))))))
+                                                     ,other-policies)))))))))
  
   (define/curry (recursion-solver depth hardness policies expr)
    (cond [(policy-definition? expr) (recursion-solver:compile-def hardness policies expr)]

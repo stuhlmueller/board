@@ -8,7 +8,8 @@
          policy-call->name
          policy-call?
          policy-definition->base-policy-name
-         policy-definition->other-policy-name
+         policy-definition->other-policies
+         other-policy-names->other-policies
          policy-definition->policy-name
          policy-definition->goal-name
          policy-definition->causal-model-name
@@ -48,9 +49,16 @@
        (fifth (definition->body expr))
        #f))
  
- (define (policy-definition->other-policy-name expr)
-   (fourth (definition->body expr)))
+ (define (policy-definition->other-policies expr depth-var)
+   (let ((other-policy-names (fourth (definition->body expr))))
+     (append '(list) (other-policy-names->other-policies other-policy-names depth-var))))
 
+ (define (other-policy-names->other-policies expr depth-var)
+   (if (null? expr)
+       '()
+       (let ((policy-name (first expr)))
+         (append `((,policy-name (- ,depth-var ,1))) (other-policy-names->other-policies (rest expr) depth-var)))))
+ 
  (define (policy-call? expr)
    (and (list? expr)
         (= (length expr) 1)
