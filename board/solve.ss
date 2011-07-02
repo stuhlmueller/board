@@ -32,11 +32,13 @@
              ,action-name
              (and ,@(make-list hardness
                                `(,goal-name (,causal-model-name ,action-name
-                                                     ,other-policies)))))))))
+                                                     ,@other-policies)))))))))
  
   (define/curry (recursion-solver depth hardness policies expr)
    (cond [(policy-definition? expr) (recursion-solver:compile-def hardness policies expr)]
          [(policy-call? expr) `(,(policy-call->name expr) ,depth)]
          [else (error expr "recursion-solver: unknown expression type")]))
+
+
 
  )

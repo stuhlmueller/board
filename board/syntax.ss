@@ -51,13 +51,13 @@
  
  (define (policy-definition->other-policies expr depth-var)
    (let ((other-policy-names (fourth (definition->body expr))))
-     (append '(list) (other-policy-names->other-policies other-policy-names depth-var))))
+     (other-policy-names->other-policies other-policy-names depth-var)))
 
  (define (other-policy-names->other-policies expr depth-var)
    (if (null? expr)
        '()
        (let ((policy-name (first expr)))
-         (append `((,policy-name (- ,depth-var ,1))) (other-policy-names->other-policies (rest expr) depth-var)))))
+         (append (list `(,policy-name (- ,depth-var ,1))) (other-policy-names->other-policies (rest expr) depth-var)))))
  
  (define (policy-call? expr)
    (and (list? expr)
