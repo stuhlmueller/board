@@ -20,15 +20,13 @@
  (define-record-type perspective
    (fields (immutable name perspective->name)
            (immutable code perspective->code)))
-
+ 
  (define (get-policy-names scenario)
-   (if (null? scenario)
-       '()
-       (let ([expr (first scenario)]
-             [policy-names (get-policy-names (rest scenario))])
-         (if (policy-definition? expr)
-             (pair (policy-definition->policy-name expr) policy-names)
-             policy-names))))
+   (filter-map (lambda (expr)
+                 (if (policy-definition? expr)
+                     (policy-definition->policy-name expr)
+                     #f))
+               scenario))
  
  (define (compile-expr solver expr)
    (if (policy-definition? expr)
