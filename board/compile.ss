@@ -21,32 +21,32 @@
    (fields (immutable name perspective->name)
            (immutable code perspective->code)))
 
- (define (get-policies scenario)
+ (define (get-policy-names scenario)
    (if (null? scenario)
        '()
        (let ([expr (first scenario)]
-             [policies (get-policies (rest scenario))])
+             [policy-names (get-policy-names (rest scenario))])
          (if (policy-definition? expr)
-             (pair (policy-definition->policy-name expr) policies)
-             policies))))
+             (pair (policy-definition->policy-name expr) policy-names)
+             policy-names))))
  
  (define (compile-expr solver expr)
    (if (policy-definition? expr)
        (solver expr)
        expr))
 
- (define (make-perspectives solver policies code)
+ (define (make-perspectives solver policy-names code)
    (map (lambda (policy)
           (make-perspective policy
                             (append code
-                                    `( ,(solver policies `(,policy)) ))))
-        policies))
+                                    `( ,(solver policy-names `(,policy)) ))))
+        policy-names))
  
  (define (compile scenario solver)
-   (let* ([policies (get-policies scenario)]
-          [code (map (lambda (expr) (compile-expr (solver policies) expr))
+   (let* ([policy-names (get-policy-names scenario)]
+          [code (map (lambda (expr) (compile-expr (solver policy-names) expr))
                      scenario)])
      ;; (for-each ppe code)
-     (make-perspectives solver policies code)))
+     (make-perspectives solver policy-names code)))
 
  )

@@ -14,31 +14,33 @@
 
  (define make-variable
    (symbol-maker 'v))
+
+ (define/curry (policy-name->policy-call depth-var policy-name)
+   `(,policy-name (- ,depth-var ,1)))
  
- (define (recursion-solver:compile-def hardness policies expr)
+ (define (recursion-solver:compile-def hardness policy-names expr)
    (let* ([depth-var (make-variable)]
-         [policy-name (policy-definition->policy-name expr)]
-         [other-policies (policy-definition->other-policies expr depth-var)]
-         [base-policy-name (or (policy-definition->base-policy-name expr)
-                               'uniform-action)]
-         [action-name (make-variable)]
-         [goal-name (policy-definition->goal-name expr)]
-         [causal-model-name (policy-definition->causal-model-name expr)])
+          [policy-name (policy-definition->policy-name expr)]
+          [other-policy-names (policy-definition->other-policy-names expr depth-var)]
+          [other-policy-calls (map (policy-name->policy-call depth-var) other-policy-names)]
+          [base-policy-name (or (policy-definition->base-policy-name expr)
+                                'uniform-action)]
+          [action-name (make-variable)]
+          [goal-name (policy-definition->goal-name expr)]
+          [causal-model-name (policy-definition->causal-model-name expr)])
      `(define (,policy-name ,depth-var)
         (if (= ,depth-var 0)
             (,base-policy-name)
             (rejection-query
-             (define ,action-name (uniform-action))
+             (define ,action-name (,base-policy-name))
              ,action-name
              (and ,@(make-list hardness
                                `(,goal-name (,causal-model-name ,action-name
-                                                     ,@other-policies)))))))))
+                                                                ,@other-policy-calls)))))))))
  
-  (define/curry (recursion-solver depth hardness policies expr)
-   (cond [(policy-definition? expr) (recursion-solver:compile-def hardness policies expr)]
+ (define/curry (recursion-solver depth hardness policy-names expr)
+   (cond [(policy-definition? expr) (recursion-solver:compile-def hardness policy-names expr)]
          [(policy-call? expr) `(,(policy-call->name expr) ,depth)]
          [else (error expr "recursion-solver: unknown expression type")]))
-
-
 
  )

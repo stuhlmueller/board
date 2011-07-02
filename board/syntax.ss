@@ -7,12 +7,11 @@
  (export define?
          policy-call->name
          policy-call?
-         policy-definition->base-policy-name
-         policy-definition->other-policies
-         other-policy-names->other-policies
+         policy-definition->base-policy-name         
          policy-definition->policy-name
          policy-definition->goal-name
          policy-definition->causal-model-name
+         policy-definition->other-policy-names
          policy-definition?
          solve?)
 
@@ -49,15 +48,8 @@
        (fifth (definition->body expr))
        #f))
  
- (define (policy-definition->other-policies expr depth-var)
-   (let ((other-policy-names (fourth (definition->body expr))))
-     (other-policy-names->other-policies other-policy-names depth-var)))
-
- (define (other-policy-names->other-policies expr depth-var)
-   (if (null? expr)
-       '()
-       (let ((policy-name (first expr)))
-         (append (list `(,policy-name (- ,depth-var ,1))) (other-policy-names->other-policies (rest expr) depth-var)))))
+ (define (policy-definition->other-policy-names expr depth-var)
+   (fourth (definition->body expr))) 
  
  (define (policy-call? expr)
    (and (list? expr)
