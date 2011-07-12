@@ -49,7 +49,7 @@
        #f))
  
  (define (policy-definition->other-policy-names expr depth-var)
-   (fourth (definition->body expr))) 
+   (rest (fourth (definition->body expr))))
  
  (define (policy-call? expr)
    (and (list? expr)
