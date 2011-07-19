@@ -3,8 +3,8 @@
 (import (board)
         (rnrs))
 
-(define my-scenario
-  (make-scenario
+(define bar-game
+  (make-game
    '(
      (define actions
        '(popular-bar other-bar))
@@ -27,5 +27,5 @@
               (lambda () (sample-action .6))))
      )))
 
-(run-scenario my-scenario
-              (recursion-solver 5 2))
+(run-game bar-game
+          (recursion-solver 5 2))

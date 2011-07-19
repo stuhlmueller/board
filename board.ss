@@ -4,20 +4,20 @@
 
  (board)
 
- (export make-scenario
-         recursion-solver
-         run-scenario)
+ (export make-game
+         run-game
+         recursion-solver)
  
  (import (board compile)
-         (board scenario)
+         (board game)
          (board solve)
          (cosh)
          (rnrs)
          (scheme-tools srfi-compat :1)
          (scheme-tools))
 
- (define (run-scenario scenario solver)
-   (let ([perspectives (compile scenario solver)])
+ (define (run-game game solver)
+   (let ([perspectives (compile game solver)])
      (for-each (lambda (perspective)
                  (let ([marginals (cosh (perspective->code perspective))])
                    (pe "\n" (perspective->name perspective) "\n")

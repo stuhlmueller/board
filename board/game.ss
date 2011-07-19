@@ -2,13 +2,13 @@
 
 (library
 
- (board scenario)
+ (board game)
 
- (export make-scenario)
+ (export make-game)
 
  (import (rnrs))
 
- (define scenario-header
+ (define game-header
    '(
 
      (define (goal-match state)
@@ -32,8 +32,8 @@
      
      ))
 
- (define (make-scenario scenario-defs)
-   (append scenario-header
-           scenario-defs))
+ (define (make-game game-defs)
+   (append game-header
+           game-defs))
 
  )

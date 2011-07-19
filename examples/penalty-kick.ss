@@ -3,8 +3,8 @@
 (import (board)
         (rnrs))
 
-(define my-scenario
-  (make-scenario
+(define penalty-game
+  (make-game
    '(
 
      (define actions '(left right))
@@ -43,5 +43,5 @@
 
      )))
 
-(run-scenario my-scenario
-              (recursion-solver 10 1))
+(run-game penalty-game
+          (recursion-solver 10 1))
