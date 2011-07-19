@@ -29,11 +29,10 @@
           [goal-name (policy-definition->goal-name expr)]
           [causal-model-name (policy-definition->causal-model-name expr)])
      `(define (,policy-name ,depth-var)
-        (if (= ,depth-var 0)
-            (,base-policy-name)
-            (rejection-query
-             (define ,action-name (,base-policy-name))
-             ,action-name
+        (rejection-query
+         (define ,action-name (,base-policy-name))
+         ,action-name
+         (or (= ,depth-var 0)
              (and ,@(make-list hardness
                                `(,goal-name (,causal-model-name ,action-name
                                                                 ,@other-policy-calls)))))))))

@@ -10,16 +10,18 @@
 
  (define scenario-header
    '(
-     (define (utility-match a b)
-       (if (eq? a b)
-           1
-           .1))
 
-     (define (utility-avoid a b)
-       (if (eq? a b)
-           .1
-           1))
+     (define (goal-match state)
+       (equal? (length (delete-duplicates state))
+               1))
+     
+     (define (goal-avoid state)
+       (equal? (length (delete-duplicates state))
+               (length state)))
 
+     (define (identity-world . actions)
+       actions)
+     
      (define (sample-action p)
        (if (flip p)
            (first actions)
@@ -33,7 +35,5 @@
  (define (make-scenario scenario-defs)
    (append scenario-header
            scenario-defs))
-
- 
 
  )
