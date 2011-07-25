@@ -20,14 +20,14 @@
  
  (define (recursion-solver:compile-def hardness policy-names expr)
    (let* ([depth-var (make-variable)]
-          [policy-name (policy-definition->policy-name expr)]
-          [other-policy-names (policy-definition->other-policy-names expr depth-var)]
+          [policy-name (policy-def->policy-name expr)]
+          [other-policy-names (policy-def->other-policy-names expr)]
           [other-policy-calls (map (policy-name->policy-call depth-var) other-policy-names)]
-          [base-policy-name (or (policy-definition->base-policy-name expr)
+          [base-policy-name (or (policy-def->base-policy-name expr)
                                 'uniform-action)]
           [action-name (make-variable)]
-          [goal-name (policy-definition->goal-name expr)]
-          [causal-model-name (policy-definition->causal-model-name expr)])
+          [goal-name (policy-def->goal-name expr)]
+          [causal-model-name (policy-def->causal-model-name expr)])
      `(define (,policy-name ,depth-var)
         (rejection-query
          (define ,action-name (,base-policy-name))
@@ -38,7 +38,7 @@
                                                                 ,@other-policy-calls)))))))))
  
  (define/curry (recursion-solver depth hardness policy-names expr)
-   (cond [(policy-definition? expr) (recursion-solver:compile-def hardness policy-names expr)]
+   (cond [(policy-def? expr) (recursion-solver:compile-def hardness policy-names expr)]
          [(policy-call? expr) `(,(policy-call->name expr) ,depth)]
          [else (error expr "recursion-solver: unknown expression type")]))
 

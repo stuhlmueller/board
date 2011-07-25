@@ -19,17 +19,10 @@
 
  (define-record-type perspective
    (fields (immutable name perspective->name)
-           (immutable code perspective->code)))
- 
- (define (get-policy-names game)
-   (filter-map (lambda (expr)
-                 (if (policy-definition? expr)
-                     (policy-definition->policy-name expr)
-                     #f))
-               game))
+           (immutable code perspective->code))) 
  
  (define (compile-expr solver expr)
-   (if (policy-definition? expr)
+   (if (policy-def? expr)
        (solver expr)
        expr))
 
@@ -41,7 +34,7 @@
         policy-names))
  
  (define (compile game solver)
-   (let* ([policy-names (get-policy-names game)]
+   (let* ([policy-names (game->policy-names game)]
           [code (map (lambda (expr) (compile-expr (solver policy-names) expr))
                      game)])
      ;; (for-each ppe code)

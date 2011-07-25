@@ -5,14 +5,16 @@
  (board syntax)
 
  (export define?
+         game->policy-names
+         game->policy-defs
          policy-call->name
          policy-call?
-         policy-definition->base-policy-name         
-         policy-definition->policy-name
-         policy-definition->goal-name
-         policy-definition->causal-model-name
-         policy-definition->other-policy-names
-         policy-definition?
+         policy-def->base-policy-name         
+         policy-def->policy-name
+         policy-def->goal-name
+         policy-def->causal-model-name
+         policy-def->other-policy-names
+         policy-def?
          solve?)
 
  (import (rnrs)
@@ -22,34 +24,34 @@
  (define (define? expr)
    (tagged-list? expr 'define))
 
- (define definition->name caadr)
+ (define def->name caadr)
  
- (define definition->body third) 
+ (define def->body third) 
 
  (define (solve? expr)
    (tagged-list? expr 'solve))
 
- (define (policy-definition? expr)
+ (define (policy-def? expr)
    (and (define? expr)
         (> (length expr) 2)
         (solve? (third expr))))
 
- (define (policy-definition->policy-name expr)
-   (definition->name expr))
+ (define (policy-def->policy-name expr)
+   (def->name expr))
 
- (define (policy-definition->goal-name expr)
-   (second (definition->body expr)))
+ (define (policy-def->goal-name expr)
+   (second (def->body expr)))
 
- (define (policy-definition->causal-model-name expr)
-   (third (definition->body expr)))
+ (define (policy-def->causal-model-name expr)
+   (third (def->body expr)))
  
- (define (policy-definition->base-policy-name expr)
-   (if (> (length (definition->body expr)) 4)
-       (fifth (definition->body expr))
+ (define (policy-def->base-policy-name expr)
+   (if (> (length (def->body expr)) 4)
+       (fifth (def->body expr))
        #f))
  
- (define (policy-definition->other-policy-names expr depth-var)
-   (rest (fourth (definition->body expr))))
+ (define (policy-def->other-policy-names expr)
+   (rest (fourth (def->body expr))))
  
  (define (policy-call? expr)
    (and (list? expr)
@@ -57,5 +59,12 @@
         (symbol? (first expr))))
 
  (define policy-call->name first) 
+
+ (define (game->policy-defs game)
+   (filter policy-def? game))
+ 
+ (define (game->policy-names game)
+   (map policy-def->policy-name
+        (game->policy-defs game)))
 
  )
