@@ -1,6 +1,6 @@
 #!r6rs
 
-;; Given a game in the board language, compute a graph structures with
+;; Given a game in the board language, compute graph structures with
 ;; metadata that makes explicit what connections between players (and
 ;; groups of players) exist.
 
