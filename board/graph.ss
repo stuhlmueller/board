@@ -10,7 +10,10 @@
 
  (export game->graph
          graph->components
-         policy-name->policy-def)
+         policy-name->policy-def
+         children-outside-component
+         policy-name->causal-model
+         policy-name->policy-goal)
 
  (import (board syntax)
          (rnrs)
@@ -43,9 +46,29 @@
  ;; in reverse topological order (i.e., if there is a link from A to
  ;; B, B comes first.)
  (define (graph->components graph)
-   (reverse (strongly-connected-components graph)))
+   (strongly-connected-components graph))
 
  (define (policy-name->policy-def policy-name)
    (get-property policy-name 'policy-def))
+
+ (define (policy-name->causal-model policy-name)
+   (policy-def->causal-model-name (policy-name->policy-def policy-name)))
+
+ (define (policy-name->policy-goal policy-name)
+   (policy-def->goal-name (policy-name->policy-def policy-name)))
+
+ (define (belongs-to-list x b)
+   (cond ((null? b) #f)
+         ((equal? x (first b)) #t)
+         (else (belongs-to-list x (rest b)))))
+
+ (define (list-difference a b)
+   (cond ((null? a) '())
+         ((belongs-to-list (first a) b) (list-difference (rest a) b))
+         (else (pair (first a) (list-difference (rest a) b)))))
+
+ (define (children-outside-component graph component policy-name)
+   (let ([children (graph:children graph policy-name)])
+     (list-difference children component)))
 
  )
